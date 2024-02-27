@@ -6,6 +6,9 @@ require("dotenv").config();
 const { createServer } = require("http");
 const socket = require("socket.io");
 const jwt = require("jsonwebtoken")
+const rateLimit = require('express-rate-limit');
+
+// Routes
 const taskRouter = require("./src/routers/task");
 const authRouter = require("./src/routers/auth");
 const mongoose = require("mongoose")
@@ -41,6 +44,12 @@ class Server {
   }
 
   setupRoutes() {
+    // Apply rate limiting middleware
+    const limiter = rateLimit({
+      windowMs: 15 * 60 * 1000, // 15 minutes
+      max: 100, // limit each IP to 100 requests per windowMs
+    });
+    this.app.use(limiter);
     this.app.use("/api", (req, res, next) => {
       if (req.originalUrl === "/api") {
         res.status(200).send("OK");
@@ -75,7 +84,7 @@ class Server {
     const users = []
     this.io.on('connection', async (socket) => {
       console.log('A client connected');
-      const token = socket.handshake.headers.authorization;
+      const token = socket.handshake.headers.auth;
       if (!token) {
         console.log('Authentication error')
       }

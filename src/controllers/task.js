@@ -36,9 +36,15 @@ class TaskController {
   };
   updateTaskStatus = async (req, res) => {
     try {
-      let body = req.body
-      let taskId = req.params.taskId
-      let result = await TaskServices.updateStatus(body, taskId);
+      const body = req?.body
+      const taskId = req?.params?.taskId
+      if (!taskId) {
+        res.send({
+          message: "taskId Missing",
+          status: 400,
+        })
+      }
+      const result = await TaskServices.updateStatus(body, taskId);
       res.send({
         message: "OK",
         status: 201,
@@ -55,7 +61,13 @@ class TaskController {
   updateTasks = async (req, res) => {
     try {
       let body = req.body
-      let taskId = req.params.taskId
+      let taskId = req?.params?.taskId
+      if (!taskId) {
+        res.send({
+          message: "taskId Missing",
+          status: 400,
+        })
+      }
       let result = await TaskServices.modify(body, taskId);
       res.send({
         message: "Updated",
@@ -72,7 +84,13 @@ class TaskController {
   };
   deleteTask = async (req, res) => {
     try {
-      let taskId = req.params.taskId
+      let taskId = req?.params?.taskId
+      if (!taskId) {
+        res.send({
+          message: "taskId Missing",
+          status: 400,
+        })
+      }
       let result = await TaskServices.delete(taskId);
       res.send({
         message: "Task Deleted",

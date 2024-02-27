@@ -8,7 +8,7 @@ class AuthServices {
       const token = result.generateToken()
       return token
     } catch (error) {
-      console.log("ERROR", error)
+      throw error
     }
   };
   login = async (user) => {
@@ -16,7 +16,7 @@ class AuthServices {
       const token = await user.generateToken();
       return token
     } catch (error) {
-      console.log("ERROR", error)
+      throw error
     }
   };
 }

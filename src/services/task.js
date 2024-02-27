@@ -7,7 +7,7 @@ class TaskServices {
       let response = await Task.create(body)
       return response
     } catch (error) {
-      console.log("ERROR", error)
+      throw error
     }
   };
   getUserTasks = async (userId) => {
@@ -15,7 +15,7 @@ class TaskServices {
       let response = await Task.find({ owner_id: (userId) })
       return response
     } catch (error) {
-      console.log("ERROR", error)
+      throw error
     }
   };
   updateStatus = async (body, taskId) => {
@@ -23,7 +23,7 @@ class TaskServices {
       const updatedTask = await Task.findByIdAndUpdate({ _id: taskId }, { completed: body.status }, { new: true });
       return updatedTask
     } catch (error) {
-      console.log("ERROR", error)
+      throw error
     }
   };
   modify = async (body, taskId) => {
@@ -31,7 +31,7 @@ class TaskServices {
       const updatedTask = await Task.findByIdAndUpdate({ _id: taskId }, { ...body }, { new: true });
       return updatedTask
     } catch (error) {
-      console.log("ERROR", error.message)
+      throw error
     }
   };
   delete = async (taskId) => {
@@ -39,7 +39,7 @@ class TaskServices {
       const updatedTask = await Task.findByIdAndDelete({ _id: taskId });
       return updatedTask
     } catch (error) {
-      console.log("ERROR", error.message)
+      throw error
     }
   };
 }
