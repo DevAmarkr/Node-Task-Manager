@@ -1,6 +1,6 @@
 # Task Manager
 
-A simple task management application built with Node.js, Express, MongoDB, and WebSocket for real-time updates.
+A simple task management application built with Node.js, Express, MongoDB, and socket.io for real-time updates.
 
 ## Installation
 
