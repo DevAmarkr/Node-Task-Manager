@@ -42,7 +42,14 @@ Node-Task-Manager/
   -  Whenever there's a change (insert, update, delete) in the tasks collection, the change event is captured by the change stream
   -  The server broadcasts the updated list of tasks to the owner of the task connected to the server via the WebSocket connection via notify event.
 
+## .env content
 
+- PORT=3210
+- MONGO_URL
+- DB_NAME
+- SALT_ROUND
+- SEC_TOK
+- EXP_IN
 
 ## NodeJs Package/Library used in this project
 
