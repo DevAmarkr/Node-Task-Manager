@@ -1,37 +1,45 @@
+const { default: mongoose } = require("mongoose");
+const Task = require("../models/task")
+
 class TaskServices {
   create = async (body) => {
     try {
-      return "OK";
+      let response = await Task.create(body)
+      return response
     } catch (error) {
-      return error;
+      console.log("ERROR", error)
     }
   };
-  get = async (body) => {
+  getUserTasks = async (userId) => {
     try {
-      return "OK";
+      let response = await Task.find({ owner_id: (userId) })
+      return response
     } catch (error) {
-      return error;
+      console.log("ERROR", error)
     }
   };
-  updateStatus = async (body) => {
+  updateStatus = async (body, taskId) => {
     try {
-      return "OK";
+      const updatedTask = await Task.findByIdAndUpdate({ _id: taskId }, { completed: body.status }, { new: true });
+      return updatedTask
     } catch (error) {
-      return error;
+      console.log("ERROR", error)
     }
   };
-  modify = async (body) => {
+  modify = async (body, taskId) => {
     try {
-      return "OK";
+      const updatedTask = await Task.findByIdAndUpdate({ _id: taskId }, { ...body }, { new: true });
+      return updatedTask
     } catch (error) {
-      return error;
+      console.log("ERROR", error.message)
     }
   };
-  delete = async (body) => {
+  delete = async (taskId) => {
     try {
-      return "OK";
+      const updatedTask = await Task.findByIdAndDelete({ _id: taskId });
+      return updatedTask
     } catch (error) {
-      return error;
+      console.log("ERROR", error.message)
     }
   };
 }

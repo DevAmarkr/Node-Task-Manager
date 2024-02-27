@@ -3,7 +3,8 @@ const TaskServices = require("../services/task");
 class TaskController {
   createTask = async (req, res) => {
     try {
-      let result = TaskService.create(req.body);
+      req.body.owner_id = req.userId
+      let result = await TaskServices.create(req.body);
       res.send({
         message: "OK",
         status: 201,
@@ -11,7 +12,7 @@ class TaskController {
       });
     } catch (error) {
       res.send({
-        message: "Failed",
+        message: "Something went wrong",
         status: 500,
         data: error,
       });
@@ -19,7 +20,7 @@ class TaskController {
   };
   getTask = async (req, res) => {
     try {
-      let result = TaskService.create(req.body);
+      let result = await TaskServices.getUserTasks(req.userId);
       res.send({
         message: "OK",
         status: 200,
@@ -27,31 +28,17 @@ class TaskController {
       });
     } catch (error) {
       res.send({
-        message: "Failed",
+        message: "Something went wrong",
         status: 500,
         data: error,
       });
     }
   };
-  getTaskHistory = async (req, res) => {
+  updateTaskStatus = async (req, res) => {
     try {
-      let result = TaskService.create(req.body);
-      res.send({
-        message: "OK",
-        status: 200,
-        data: result,
-      });
-    } catch (error) {
-      res.send({
-        message: "Failed",
-        status: 500,
-        data: error,
-      });
-    }
-  };
-  changeTaskStatus = async (req, res) => {
-    try {
-      let result = TaskService.create(req.body);
+      let body = req.body
+      let taskId = req.params.taskId
+      let result = await TaskServices.updateStatus(body, taskId);
       res.send({
         message: "OK",
         status: 201,
@@ -59,7 +46,7 @@ class TaskController {
       });
     } catch (error) {
       res.send({
-        message: "Failed",
+        message: "Something went wrong",
         status: 500,
         data: error,
       });
@@ -67,15 +54,17 @@ class TaskController {
   };
   updateTasks = async (req, res) => {
     try {
-      let result = TaskService.create(req.body);
+      let body = req.body
+      let taskId = req.params.taskId
+      let result = await TaskServices.modify(body, taskId);
       res.send({
-        message: "OK",
+        message: "Updated",
         status: 201,
         data: result,
       });
     } catch (error) {
       res.send({
-        message: "Failed",
+        message: "Something went wrong",
         status: 500,
         data: error,
       });
@@ -83,15 +72,16 @@ class TaskController {
   };
   deleteTask = async (req, res) => {
     try {
-      let result = TaskService.create(req.body);
+      let taskId = req.params.taskId
+      let result = await TaskServices.delete(taskId);
       res.send({
-        message: "OK",
+        message: "Task Deleted",
         status: 200,
         data: result,
       });
     } catch (error) {
       res.send({
-        message: "Failed",
+        message: "Something went wrong",
         status: 500,
         data: error,
       });

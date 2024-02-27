@@ -1,13 +1,18 @@
 const mongoose = require("mongoose");
-
+const schemaOptions = {
+  timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' },
+};
 const schema = new mongoose.Schema({
+  title: {
+    type: "string",
+    required: true,
+  },
   description: {
     type: "string",
     required: true,
   },
   completed: {
     type: "boolean",
-    required: true,
     default: false,
   },
   owner_id: {
@@ -15,7 +20,7 @@ const schema = new mongoose.Schema({
     required: true,
     ref: "User",
   },
-});
+}, schemaOptions);
 
 const Task = mongoose.model("Task", schema);
 module.exports = Task;
