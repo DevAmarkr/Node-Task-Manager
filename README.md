@@ -27,6 +27,23 @@ Node-Task-Manager/
 - Inside src/, there are folders for controllers, routes, models, services, and middlewares.
 - Each of these folders contains two files: task.js and auth.js, representing respective functionalities.
 
+## Real-Time updates with webSocket flow
+
+  ###  Client Side
+  -  The client-side application (e.g., a web browser or Postman) establishes a WebSocket connection with the server
+  -  Upon successful connection, the client will send an authentication token to the server for authentication
+  -  After authentication, the server will send an initial list of tasks to the client
+
+  ###  Server-Side
+  -  The server, upon receiving a connection request from a client, establishes a WebSocket connection.
+  -  The server authenticates the client by verifying the authentication token provided
+  -  Once authenticated, the server will send the initial list of tasks to the client
+  -  The server sets up a MongoDB Change Stream using Task.watch() to monitor changes in the tasks collection.
+  -  Whenever there's a change (insert, update, delete) in the tasks collection, the change event is captured by the change stream
+  -  The server broadcasts the updated list of tasks to the owner of the task connected to the server via the WebSocket connection via notify event.
+
+
+
 ## NodeJs Package/Library used in this project
 
 `"bcrypt": "^5.1.1",
@@ -42,7 +59,7 @@ Node-Task-Manager/
     "morgan": "^1.10.0",
     "socket.io": "^4.7.4"`
 
-## Endpoits
+## Endpoints
 
 - ### Task (All Routes Are Protected So Please Send JWT Token In Header As Auth Key)
 `POST:  http://localhost:3210/api/task/create {"title":"", "description":""}`
@@ -61,21 +78,6 @@ Node-Task-Manager/
 `POST:   http://localhost:3210/api/auth/login { "email":"", "password":""}`
 
 - NOTE: `Please connect Websocket server through Postman and pass JWT token for validation in the header as auth key and listen to welcome, and notify events for real-time updates`
-
-## Real-Time updates with webSocket flow
-
-  ###  Client Side
-  -  The client-side application (e.g., a web browser or Postman) establishes a WebSocket connection with the server
-  -  Upon successful connection, the client will send an authentication token to the server for authentication
-  -  After authentication, the server will send an initial list of tasks to the client
-
-  ###  Server-Side
-  -  The server, upon receiving a connection request from a client, establishes a WebSocket connection.
-  -  The server authenticates the client by verifying the authentication token provided
-  -  Once authenticated, the server will send the initial list of tasks to the client
-  -  The server sets up a MongoDB Change Stream using Task.watch() to monitor changes in the tasks collection.
-  -  Whenever there's a change (insert, update, delete) in the tasks collection, the change event is captured by the change stream
-  -  The server broadcasts the updated list of tasks to the owner of the task connected to the server via the WebSocket connection via notify event.
 
 
 ## License
