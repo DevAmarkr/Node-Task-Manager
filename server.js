@@ -94,17 +94,19 @@ class Server {
         }
         // Add the decoded user information to the socket object for later use
         socket.user = decoded;
-        if (users.indexOf(socket.user.userId) === -1) {
-          users.push(socket.user.userId)
+        if (users.indexOf(socket?.user?.userId) === -1) {
+          users.push(socket?.user?.userId)
         }
       })
       let tasks = await Task.find({ owner_id: socket.user.userId })
       socket.emit("welcome", { data: tasks })
 
+
+
+      //Real time Data Flow
       const changeStream = Task.watch();
       changeStream.on('change', async (change) => {
         const { operationType, fullDocument } = change;
-        console.log(operationType, 'operation')
         if (String(fullDocument?.owner_id) === socket?.user?.userId && operationType === "insert") {
           this.io.emit('notify', {
             message: "New Task Created",
@@ -128,11 +130,9 @@ class Server {
             });
           }
         }
-
         if (operationType === "delete") {
           const { documentKey } = change
           if (users.indexOf(socket?.user?.userId) !== -1) {
-            console.log("I am in")
             this.io.emit('notify', {
               message: "Task Deleted",
               data: null
@@ -140,11 +140,10 @@ class Server {
           }
         }
       });
-
       // Handle socket events here
       socket.on('disconnect', () => {
         console.log('A client disconnected');
-        const index = users.indexOf(socket.user.userId)
+        const index = users.indexOf(socket?.user?.userId)
         users.splice(index, 1)
       });
     });
@@ -156,7 +155,7 @@ class Server {
         console.log(`Server listening on port ${port}`);
       });
     } catch (error) {
-      console.log("END");
+      throw error
     }
   }
 }

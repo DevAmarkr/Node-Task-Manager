@@ -11,7 +11,6 @@ class AuthController {
         token: result,
       });
     } catch (error) {
-      console.log(error)
       res.send({
         message: "Something went wrong",
         status: 500,
@@ -46,7 +45,6 @@ class AuthController {
       }
 
     } catch (error) {
-      console.log(error)
       res.send({
         message: "Something went wrong",
         status: 500,
